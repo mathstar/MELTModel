@@ -1,4 +1,5 @@
 Integer x ;
+Boolean x ;
 
 y = 3 ; 
 
