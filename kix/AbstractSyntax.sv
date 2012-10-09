@@ -14,8 +14,6 @@ synthesized attribute errors :: [ String ] ;
 inherited attribute env :: [ Pair<String   Decorated Decl> ] ;
 synthesized attribute defs :: [ Pair<String    Decorated Decl> ] ;
 
-synthesized attribute varName :: String ;
-
 nonterminal Root with pp, errors;
 
 abstract production root
@@ -49,9 +47,9 @@ abstract production declStmt
 s::Stmt ::= d::Decl
 {
   s.pp = d.pp ++ ";" ;
-  s.errors = case lookup ( d.varName, s.env ) of
+  s.errors = case lookup ( head(d.defs).fst , s.env ) of
                nothing() -> []
-             | just(n) -> [ n.varName ++ " is already declared.\n\n" ] 
+             | just(n) -> [ head(d.defs).fst ++ " is already declared.\n\n" ] 
              end ;
   s.defs = d.defs ;
 }
@@ -93,13 +91,12 @@ s::Stmt ::= e::Expr th::Stmt el::Stmt
   el.env = s.env ;
 }
 
-nonterminal Decl with pp, defs, varName ;
+nonterminal Decl with pp, defs ;
 abstract production decl
 d::Decl ::= te::TypeExpr n::VariableName
 {
   d.pp = te.pp ++ " " ++ n.lexeme ;
   d.defs = [ pair(n.lexeme, d) ] ;
-  d.varName = n.lexeme ;
 }
 
 nonterminal TypeExpr with pp;
