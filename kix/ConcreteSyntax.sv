@@ -49,12 +49,14 @@ s::Stmt_c ::= d::Decl_c ';'
   s.ast_Stmt = declStmt(d.ast_Decl) ;
 }
 
-{-
-abstract production block_c
+
+concrete production block_c
 s::Stmt_c ::= '{' ss::Stmts_c  '}'
 {
+  s.pp = " { " ++ ss.pp ++ " } ";
+  s.ast_Stmt = block(ss.ast_Stmts) ;
 }
--}
+
 
 concrete production assignmentStmt_c
 s::Stmt_c ::= l::Expr_c '=' r::Expr_c ';'
