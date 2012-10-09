@@ -56,12 +56,15 @@ s::Stmt ::= d::Decl
   s.defs = d.defs ;
 }
 
-{-
+
 abstract production block
 s::Stmt ::= ss::Stmts 
 {
+  s.pp = " { " ++ ss.pp ++ " } ";
+  s.errors = ss.errors ;
+  s.defs = 
 }
--}
+
 
 abstract production assignmentStmt
 s::Stmt ::= l::Expr r::Expr
