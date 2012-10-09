@@ -14,6 +14,9 @@ synthesized attribute errors :: [ String ] ;
 inherited attribute env :: [ Pair<String   Decorated Decl> ] ;
 synthesized attribute defs :: [ Pair<String    Decorated Decl> ] ;
 
+synthesized attribute exprType :: String ;
+synthesized attribute te :: Decorated TypeExpr ;
+
 nonterminal Root with pp, errors;
 
 abstract production root
@@ -66,10 +69,12 @@ s::Stmt ::= ss::Stmts
 
 
 abstract production assignmentStmt
-s::Stmt ::= l::Expr r::Expr
+s::Stmt ::= l::Expr r::Expr --todo: change l to variablename terminal 
 {
   s.pp = l.pp ++ " = " ++ r.pp ++ ";";
-  s.errors = l.errors ++ r.errors ;
+  s.errors = l.errors ++ r.errors ++ if l.exprType == r.exprType
+                                     then []
+                                     else [ "Type mismatch on assignment.\n\n" ] ;
   s.defs = [ ] ;
   l.env = s.env ;
   r.env = s.env ;
@@ -95,12 +100,13 @@ s::Stmt ::= e::Expr th::Stmt el::Stmt
   el.env = s.env ;
 }
 
-nonterminal Decl with pp, defs ;
+nonterminal Decl with pp, defs, te ;
 abstract production decl
 d::Decl ::= te::TypeExpr n::VariableName
 {
   d.pp = te.pp ++ " " ++ n.lexeme ;
   d.defs = [ pair(n.lexeme, d) ] ;
+  d.te = te ;
 }
 
 nonterminal TypeExpr with pp;
@@ -117,7 +123,7 @@ te::TypeExpr ::= b::Boolean_t
   te.pp = b.lexeme ;
 }
 
-nonterminal Expr with pp, errors, env;
+nonterminal Expr with pp, errors, env, exprType;
 
 abstract production varName
 e::Expr ::= n::VariableName
@@ -126,6 +132,10 @@ e::Expr ::= n::VariableName
   e.errors = case lookup (n.lexeme, e.env) of
                nothing() -> [ n.lexeme ++ " is not defined. \n\n" ] 
              | just(d) -> [ ]
+             end ;
+  e.exprType = case lookup (n.lexeme, e.env) of
+               nothing() -> "" 
+             | just(d) -> d.te.pp
              end ;
 }
 
@@ -144,6 +154,7 @@ e::Expr ::= i::IntegerLiteral
 {
   e.pp = i.lexeme ;
   e.errors = [ ] ;
+  e.exprType = "Integer" ;
 }
 
 abstract production boolLit
@@ -151,4 +162,5 @@ e::Expr ::= b::BooleanLiteral
 {
   e.pp = b.lexeme ;
   e.errors = [ ] ;
+  e.exprType = "Boolean" ;
 }

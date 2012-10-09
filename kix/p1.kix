@@ -3,7 +3,7 @@ Boolean x ;
 
 y = 3 ; 
 
-x = 3 ; 
+x = True ; 
 
 if ( x )
   y = 3;
