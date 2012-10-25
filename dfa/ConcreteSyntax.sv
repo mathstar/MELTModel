@@ -3,6 +3,8 @@ grammar dfa ;
 synthesized attribute ast_Root :: Root ;
 synthesized attribute ast_States :: States ;
 synthesized attribute ast_State :: State ;
+synthesized attribute ast_Terminals :: Terminals ;
+synthesized attribute ast_Terminal :: Terminal ;
 
 nonterminal Root_c with pp, ast_Root ;
 concrete production root_c
@@ -61,4 +63,26 @@ s::State_c ::= 'state' n::Name ',' 'accepting' ',' 'initial' ';'
 {
   s.pp = "state " ++ n.lexeme ++ ", initial, accepting;" ;
   s.ast_State = initAcceptingState(n);
+}
+
+nonterminal Transitions_c with pp, ast_Transitions ;
+concrete production consTransitions_c
+tt::Transitions_c ::= t::Transition_c rest::Transition_c
+{
+  tt.pp = t.pp ++ "\n" ++ rest.pp ;
+  tt.ast_Transitions = consTransitions(t.ast_Transition, rest.ast_Transitions ) ;
+}
+
+concrete production nilTransitions_c
+tt::Transition_c ::=
+{
+  tt.pp = "" ;
+  tt.ast_Transitions = nilTransitions() ;
+}
+
+nonterminal Transition with pp, ast_Transition ;
+t::Transition ::= 'transition' src::Name '->' dest::Name 'with' symbol::Name ';'
+{
+  t.pp = "transition " ++ src.lexeme ++ " -> " ++ dest.lexeme ++ " with " ++ symbol.lexeme ++ ";" ;
+  t.ast_Transition = transition(src,dest,symbol) ;
 }
