@@ -28,6 +28,11 @@ IOVal<Integer> ::= largs::[String] ioin::IO
     print( "CST pretty print: " ++ r_cst.pp ++
            "\n\n" ++ 
            "AST pretty print: " ++ r_ast.pp ++
+           "\n\n" ++
+           "Initial state: " ++ case r_ast.initial of
+                                  nothing() -> "none"
+                                | just(d) -> d.stateName
+                                end ++ 
            "\n\n"
            , ioin );
 

@@ -6,7 +6,7 @@ synthesized attribute ast_State :: State ;
 synthesized attribute ast_Transitions :: Transitions ;
 synthesized attribute ast_Transition :: Transition ;
 
-nonterminal Root_c with pp, ast_Root ;
+nonterminal Root_c with pp, ast_Root;
 concrete production root_c
 r::Root_c ::= s::States_c t::Transitions_c
 {
@@ -14,7 +14,7 @@ r::Root_c ::= s::States_c t::Transitions_c
   r.ast_Root = root(s.ast_States, t.ast_Transitions);
 }
 
-nonterminal States_c with pp, ast_States ;
+nonterminal States_c with pp, ast_States;
 concrete production consStates_c
 ss::States_c ::= s::State_c rest::States_c
 {
@@ -29,7 +29,7 @@ ss::States_c ::=
   ss.ast_States = nilStates() ;
 }
 
-nonterminal State_c with pp, ast_State ;
+nonterminal State_c with pp, ast_State;
 concrete production regularState_c
 s::State_c ::= 'state' n::Name ';'
 {

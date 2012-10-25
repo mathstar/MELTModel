@@ -1,5 +1,5 @@
 state A, initial, accepting;
-state B, initial;
+state B;
 state C, accepting;
 state D;
 
