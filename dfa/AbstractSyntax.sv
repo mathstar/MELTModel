@@ -5,74 +5,63 @@ synthesized attribute pp :: String ;
 nonterminal Root with pp ;
 
 abstract production root
-r::Root ::= s::States a::Alphabet st::Initial ac::Accepting --t::Transitions
+r::Root ::= s::States --t::Transitions
 {
-  r.pp = "states {" ++ s.pp ++ "};\n" ++
-         "alphabet {" ++ a.pp ++ "};\n" ++ 
-         "initial {" ++ st.pp ++ "};\n" ++
-         "accepting {" ++ ac.pp ++ "};" ;
+  r.pp = s.pp ;
          -- ++ t.pp ;
 }
 
 nonterminal States with pp ;
 
 abstract production consStates
-ss::States ::= rest::States s::State
+ss::States ::= s::State rest::States
 {
-  ss.pp = rest.pp ++ ", " ++ s.pp ;
+  ss.pp = s.pp ++ "\n" ++  rest.pp ;
 }
 
-abstract production singleStates
-ss::States ::= s::State
+abstract production nilStates
+ss::States ::=
 {
-  ss.pp = s.pp ;
+  ss.pp = "" ;
 }
 
 nonterminal State with pp ;
 
-abstract production state
+abstract production regularState
 s::State ::= n::Name
 {
-  s.pp = n.lexeme ;
+  s.pp = "state " ++ n.lexeme ++ ";" ;
 }
 
-nonterminal Alphabet with pp ;
-
-abstract production consAlphabet
-al::Alphabet ::= rest::Alphabet s::Symbol
+abstract production initState
+s::State ::= n::Name
 {
-  al.pp = rest.pp ++ ", " ++ s.pp ;
+  s.pp = "state " ++ n.lexeme ++ ", initial;" ;
 }
 
-abstract production singleAlphabet
-al::Alphabet ::= s::Symbol
+abstract production acceptingState
+s::State ::= n::Name
 {
-  al.pp = s.pp ;
+  s.pp = "state " ++ n.lexeme ++ ", accepting;" ;
 }
 
-nonterminal Symbol with pp ;
-
-abstract production symbol
-s::Symbol ::= n::Name
+abstract production initAcceptingState
+s::State ::= n::Name
 {
-  s.pp = n.lexeme ;
+  s.pp = "state " ++ n.lexeme ++ ", initial, accepting;" ;
 }
 
-nonterminal Initial with pp ;
+nonterminal Transitions with pp ;
 
-abstract production initial
-i::Initial ::= s::State
+abstract production consStates
+ss::States ::= s::State rest::States
 {
-  i.pp = s.pp ;
+  ss.pp = s.pp ++ "\n" ++  rest.pp ;
 }
 
-nonterminal Accepting with pp ;
-
-abstract production accepting
-a::Accepting ::= ss::States
+abstract production nilStates
+ss::States ::=
 {
-  a.pp = ss.pp ;
+  ss.pp = "" ;
 }
-
-
 
