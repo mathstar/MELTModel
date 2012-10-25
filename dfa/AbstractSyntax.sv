@@ -53,15 +53,23 @@ s::State ::= n::Name
 
 nonterminal Transitions with pp ;
 
-abstract production consStates
-ss::States ::= s::State rest::States
+abstract production consTransitions
+tt::Transitions ::= t::Transition rest::Transitions
 {
-  ss.pp = s.pp ++ "\n" ++  rest.pp ;
+  tt.pp = t.pp ++ "\n" ++  rest.pp ;
 }
 
-abstract production nilStates
-ss::States ::=
+abstract production nilTransitions
+tt::Transitions ::=
 {
-  ss.pp = "" ;
+  tt.pp = "" ;
+}
+
+nonterminal Transition with pp ;
+
+abstract production transition
+t::Transition ::= src::Name dest::Name symbol::Name
+{
+  t.pp = "transition " ++ src.pp ++ " -> " ++ dest.pp ++ " with " ++ symbol.pp ++ " ;\n";
 }
 
