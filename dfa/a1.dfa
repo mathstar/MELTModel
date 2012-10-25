@@ -4,12 +4,12 @@ state C, accepting;
 state D;
 
 
-//transition A -> B with 0 ;
-//transition A -> C with 1 ;
-//transition B -> B with 0 ;
-//transition B -> C with 1 ;
-//transition C -> A with 0 ;
-//transition C -> B with 1 ;
+transition A -> B with 0 ;
+transition A -> C with 1 ;
+transition B -> B with 0 ;
+transition B -> C with 1 ;
+transition C -> A with 0 ;
+transition C -> B with 1 ;
 
 
 

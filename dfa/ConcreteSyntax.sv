@@ -3,15 +3,15 @@ grammar dfa ;
 synthesized attribute ast_Root :: Root ;
 synthesized attribute ast_States :: States ;
 synthesized attribute ast_State :: State ;
-synthesized attribute ast_Terminals :: Terminals ;
-synthesized attribute ast_Terminal :: Terminal ;
+synthesized attribute ast_Transitions :: Transitions ;
+synthesized attribute ast_Transition :: Transition ;
 
 nonterminal Root_c with pp, ast_Root ;
 concrete production root_c
-r::Root_c ::= s::States_c
+r::Root_c ::= s::States_c t::Transitions_c
 {
-  r.pp = s.pp ;
-  r.ast_Root = root(s.ast_States);
+  r.pp = s.pp ++ t.pp;
+  r.ast_Root = root(s.ast_States, t.ast_Transitions);
 }
 
 nonterminal States_c with pp, ast_States ;
@@ -67,21 +67,22 @@ s::State_c ::= 'state' n::Name ',' 'accepting' ',' 'initial' ';'
 
 nonterminal Transitions_c with pp, ast_Transitions ;
 concrete production consTransitions_c
-tt::Transitions_c ::= t::Transition_c rest::Transition_c
+tt::Transitions_c ::= t::Transition_c rest::Transitions_c
 {
   tt.pp = t.pp ++ "\n" ++ rest.pp ;
   tt.ast_Transitions = consTransitions(t.ast_Transition, rest.ast_Transitions ) ;
 }
 
 concrete production nilTransitions_c
-tt::Transition_c ::=
+tt::Transitions_c ::=
 {
   tt.pp = "" ;
   tt.ast_Transitions = nilTransitions() ;
 }
 
-nonterminal Transition with pp, ast_Transition ;
-t::Transition ::= 'transition' src::Name '->' dest::Name 'with' symbol::Name ';'
+nonterminal Transition_c with pp, ast_Transition ;
+concrete production transition_c
+t::Transition_c ::= 'transition' src::Name '->' dest::Name 'with' symbol::Name ';'
 {
   t.pp = "transition " ++ src.lexeme ++ " -> " ++ dest.lexeme ++ " with " ++ symbol.lexeme ++ ";" ;
   t.ast_Transition = transition(src,dest,symbol) ;

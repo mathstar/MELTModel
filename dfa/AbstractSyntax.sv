@@ -5,10 +5,9 @@ synthesized attribute pp :: String ;
 nonterminal Root with pp ;
 
 abstract production root
-r::Root ::= s::States --t::Transitions
+r::Root ::= s::States t::Transitions
 {
-  r.pp = s.pp ;
-         -- ++ t.pp ;
+  r.pp = s.pp ++ t.pp ;
 }
 
 nonterminal States with pp ;
@@ -70,6 +69,6 @@ nonterminal Transition with pp ;
 abstract production transition
 t::Transition ::= src::Name dest::Name symbol::Name
 {
-  t.pp = "transition " ++ src.pp ++ " -> " ++ dest.pp ++ " with " ++ symbol.pp ++ " ;\n";
+  t.pp = "transition " ++ src.lexeme ++ " -> " ++ dest.lexeme ++ " with " ++ symbol.lexeme ++ " ;";
 }
 
