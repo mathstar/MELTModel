@@ -1,15 +1,14 @@
+// accepts all strings ( 00 U 01 U 10 U 11 )*
+
 state A, initial, accepting;
-state B;
-state C, accepting;
-state D;
+state B ;
 
 
 transition A -> B with 0 ;
-transition A -> C with 1 ;
-transition B -> B with 0 ;
-transition B -> C with 1 ;
-transition C -> A with 0 ;
-transition C -> B with 1 ;
+transition A -> B with 1 ;
+transition B -> A with 0 ;
+transition B -> A with 1 ;
+
 
 
 

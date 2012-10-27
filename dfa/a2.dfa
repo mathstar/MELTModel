@@ -1,0 +1,9 @@
+// accepts all strings (a U b)*a
+
+state init, initial;
+state endA, accepting;
+
+transition init -> endA with a ;
+transition init -> init with b ;
+transition endA -> endA with a ;
+transition endA -> init with b ;
